@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class CartComponent implements OnInit {
 
   cart: cartVM[] = [];
+  resetCart: cartVM[] = [];
 
   doneAction: boolean = false;
 
@@ -41,6 +42,8 @@ export class CartComponent implements OnInit {
   }
 
   edit(id: number): void {
+    debugger
+    this.resetCart = this.cart;
     const selected = this.cart.find(item => item.id === id);
     if (selected) {
       selected.editMode = true;
@@ -53,6 +56,9 @@ export class CartComponent implements OnInit {
   }
 
   undoDone(id: number): void {
+    debugger
+    this.cart = this.resetCart;
+    this.localStorageService.setItemFromLocalS(this.cart);
     const selected = this.cart.find(item => item.id === id);
     if (selected) {
       selected.editMode = false;
