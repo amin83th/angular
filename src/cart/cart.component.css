@@ -1,0 +1,6 @@
+
+.container:has(.doneAction) {
+    text-decoration: line-through;
+    background-color: #62626251;
+    border: 3px dotted #14c300 !important;
+}
