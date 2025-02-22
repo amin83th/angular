@@ -21,6 +21,7 @@ export class CartComponent implements OnInit {
   constructor(private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
+    this.cart = this.localStorageService.getItemFromLocalS() || [];
     this.localStorageService.storageChanges$.subscribe((updatedCart) => {
       this.cart = updatedCart;
     });
@@ -42,8 +43,8 @@ export class CartComponent implements OnInit {
   }
 
   edit(id: number): void {
-    debugger
-    this.resetCart = this.cart;
+
+    this.resetCart = JSON.parse(JSON.stringify(this.cart));
     const selected = this.cart.find(item => item.id === id);
     if (selected) {
       selected.editMode = true;
@@ -51,12 +52,15 @@ export class CartComponent implements OnInit {
   }
 
   editDone(id: number): void {
-
     this.localStorageService.editItemFromLocalS(id);
+    const selected = this.cart.find(item => item.id === id);
+    if (selected) {
+      selected.editMode = false;
+    }
   }
 
   undoDone(id: number): void {
-    debugger
+
     this.cart = this.resetCart;
     this.localStorageService.setItemFromLocalS(this.cart);
     const selected = this.cart.find(item => item.id === id);

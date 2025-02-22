@@ -22,20 +22,25 @@ export class AppComponent implements OnInit {
   constructor(private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
+    this.carts = this.localStorageService.getItemFromLocalS() || [];
     this.localStorageService.storageChanges$.subscribe((updatedCarts) => {
       this.carts = updatedCarts;
     });
+
+    this.ids = Number(localStorage.getItem('cart_ids')) || 0;
   }
+
 
   addCart(): void {
     if (this.checkBusinessRole()) {
       let newCart = new cartVM();
-      newCart.id = ++this.ids;
-      this.ids = newCart.id
+      newCart.id = this.ids + 1;
+      this.ids = newCart.id;
       newCart.workName = this.work;
       newCart.email = this.email;
 
       this.localStorageService.setItemFromLocalS([...this.carts, newCart]);
+      localStorage.setItem('cart_ids', this.ids.toString());
 
       this.work = '';
       this.email = '';
